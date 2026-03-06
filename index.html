@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temu 跨境供应链与全球物流基本面深度分析报告 (2026最新政策修订版)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Chosen Palette: Temu Professional (Deep Slate #0f172a, Bright Orange #ea580c, Oceanic Blue #2563eb, Emerald Green #10b981) -->
+    <!-- Application Structure Plan: Ultimate End-to-End SPA Dashboard.
+         1. Executive Summary (Updated for De Minimis cancellation reality)
+         2. Supplier Ecology (Game theory, JIT penalties)
+         3. Logistics Models Pipeline (Interactive Accordion retaining ALL deep dive data: VMI/JIT, Procurement Matrix, T86 dead, Zone Skipping, Ocean Capital Flow, WMS, Reverse Loop).
+         4. Unit Economics (Stacked bars for $40 vs $80, showing the bleeding of FM model).
+         5. Global Regional Fulfillment (EU, LatAm, ME tabs).
+         6. AI & System Architecture (Dynamic JIT, 3D bin packing).
+         7. Overall Performance Charts (Cost Doughnut & SLA bar).
+         8. ESG & Macro Reality. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. All visual elements built with CSS, HTML, and Canvas. -->
+
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #0f172a; }
+        .chart-container { position: relative; width: 100%; max-width: 800px; margin-left: auto; margin-right: auto; height: 300px; max-height: 400px; }
+        @media (min-width: 768px) { .chart-container { height: 350px; } }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        html { scroll-behavior: smooth; }
+        
+        /* Navigation & Tabs */
+        .nav-link.active { background-color: #ffedd5; color: #ea580c; border-right: 4px solid #ea580c; font-weight: 600; }
+        .tab-btn.active { border-bottom: 2px solid #ea580c; color: #ea580c; font-weight: bold; }
+        .region-btn.active { background-color: #1e293b; color: white; border-color: #1e293b; }
+        
+        /* Smooth Accordion */
+        .accordion-content { transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease-in-out; max-height: 0; opacity: 0; overflow: hidden; }
+        .accordion-content.expanded { max-height: 5000px; opacity: 1; }
+        .rotate-180 { transform: rotate(180deg); }
+        
+        /* Pipeline Glow Effects */
+        .glow-blue { box-shadow: 0 0 20px rgba(37, 99, 235, 0.15); border-color: #93c5fd; }
+        .glow-orange { box-shadow: 0 0 20px rgba(234, 88, 12, 0.15); border-color: #fdba74; }
+        
+        /* Custom Animations */
+        @keyframes packIn { 0% { transform: scale(0.5) translateY(-20px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+        .bin-pack-item { animation: packIn 0.5s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.2s; } .delay-2 { animation-delay: 0.4s; } .delay-3 { animation-delay: 0.6s; } .delay-4 { animation-delay: 0.8s; }
+    </style>
+</head>
+<body class="flex flex-col md:flex-row h-screen overflow-hidden">
+
+    <!-- Sidebar Navigation -->
+    <nav class="w-full md:w-64 bg-white shadow-lg z-30 md:h-full flex-shrink-0 overflow-y-auto hide-scrollbar">
+        <div class="p-6">
+            <h1 class="text-2xl font-black text-slate-800 tracking-tight"><span class="text-orange-600">Temu</span> 全局洞察</h1>
+            <p class="text-xs text-slate-500 mt-1">基本面与供应链研报 2026</p>
+        </div>
+        <ul class="flex flex-row md:flex-col text-sm md:text-base border-b md:border-b-0 overflow-x-auto">
+            <li><a href="#summary" class="nav-link block px-6 py-4 text-slate-600 hover:bg-slate-50 whitespace-nowrap active" data-target="summary">1. 执行摘要</a></li>
+            <li><a href="#ecology" class="nav-link block px-6 py-4 text-slate-600 hover:bg-slate-50 whitespace-nowrap" data-target="ecology">2. 上游供应链生态</a></li>
+            <li><a href="#models" class="nav-link block px-6 py-4 text-slate-600 hover:bg-slate-50 whitespace-nowrap" data-target="models">3. 核心物流全景演进</a></li>
+            <li><a href="#ue" class="nav-link block px-6 py-4 text-slate-600 hover:bg-slate-50 whitespace-nowrap" data-target="ue">4. 单票 UE 财务模型</a></li>
+            <li><a href="#global" class="nav-link block px-6 py-4 text-slate-600 hover:bg-slate-50 whitespace-nowrap" data-target="global">5. 全球区域合规履约</a></li>
+            <li><a href="#ai" class="nav-link block px-6 py-4 text-slate-600 hover:bg-slate-50 whitespace-nowrap" data-target="ai">6. AI 驱动算法底座</a></li>
+            <li><a href="#performance" class="nav-link block px-6 py-4 text-slate-600 hover:bg-slate-50 whitespace-nowrap" data-target="performance">7. 宏观成本与时效</a></li>
+            <li><a href="#esg" class="nav-link block px-6 py-4 text-slate-600 hover:bg-slate-50 whitespace-nowrap" data-target="esg">8. 宏观冲击与 ESG</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto p-4 md:p-8 lg:p-12 scroll-smooth bg-slate-50 relative" id="main-content">
+        
+        <!-- 1. SUMMARY -->
+        <section id="summary" class="mb-24 pt-4">
+            <h2 class="text-3xl font-bold mb-6 text-slate-800 border-b pb-2 border-slate-200">1. 【执行摘要】 Executive Summary</h2>
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-orange-100 rounded-full blur-3xl -mr-10 -mt-10"></div>
+                <p class="text-slate-700 leading-relaxed mb-6 relative z-10 text-lg">
+                    作为全球跨境电商的现象级巨头，Temu 的核心竞争力已从单纯的“前端流量采买”深化为**“极致的端到端全链路供应链统治”**。随着 2025-2026 年美国 800 美元免税政策的正式取消，本报告全方位解构了其从源头工厂压榨（核价与JIT淘汰）、受重创的直邮单票财务模型 (UE)，到被迫加速转向的一般贸易半托管、AI算法调度、全球本土化合规以及 ESG 风险的宏大业务基本面。
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-8 relative z-10">
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 text-center shadow-inner">
+                        <div class="text-3xl mb-2">🏭</div>
+                        <h4 class="font-bold text-slate-800 text-sm">生态：极限施压</h4>
+                        <p class="text-xs text-slate-500 mt-1">周度竞价淘汰制，将制造业利润挤压至生存线</p>
+                    </div>
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 text-center shadow-inner">
+                        <div class="text-3xl mb-2">📦</div>
+                        <h4 class="font-bold text-slate-800 text-sm">物流：半托管转型</h4>
+                        <p class="text-xs text-slate-500 mt-1">免税特权终结，倒逼平台全面切入重资产海运+海外仓</p>
+                    </div>
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 text-center shadow-inner">
+                        <div class="text-3xl mb-2">🧠</div>
+                        <h4 class="font-bold text-slate-800 text-sm">算法：系统代管</h4>
+                        <p class="text-xs text-slate-500 mt-1">通过动态预测与 3D 合包算法实现调度人工替代</p>
+                    </div>
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 text-center shadow-inner">
+                        <div class="text-3xl mb-2">🌍</div>
+                        <h4 class="font-bold text-slate-800 text-sm">区域：合规壁垒</h4>
+                        <p class="text-xs text-slate-500 mt-1">应对欧洲 EPR 与拉美高税收的本土化全面妥协</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. SUPPLIER ECOLOGY -->
+        <section id="ecology" class="mb-24 pt-4">
+            <h2 class="text-3xl font-bold mb-6 text-slate-800 border-b pb-2 border-slate-200">2. 极致施压：上游供应链生态与博弈</h2>
+            <p class="text-slate-600 mb-6 leading-relaxed">Temu 恐怖的前端低价，源自其对国内产业带工厂**“核武器”级别的竞价机制**与**严苛的履约惩罚（JIT罚款）**。平台剥夺了商家的定价权与品牌溢价，使其沦为纯粹的产能提供者。</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Game Theory -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center"><span class="text-2xl mr-2">⚔️</span>全网比价与周度淘汰机制</h3>
+                    <div class="bg-slate-800 text-white p-5 rounded-xl text-sm relative overflow-hidden shadow-inner">
+                        <div class="font-bold text-orange-400 mb-3 border-b border-slate-600 pb-2">同款商品竞价逻辑 (Game Theory)</div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-1/3 text-center p-2 bg-slate-700 rounded border border-slate-600">商家 A: 供货价 $1.2</div>
+                            <div class="w-1/3 text-center text-slate-400 font-bold">VS</div>
+                            <div class="w-1/3 text-center p-2 bg-slate-700 rounded border border-slate-600">商家 B: 供货价 $1.0</div>
+                        </div>
+                        <div class="text-center text-orange-400 mb-4">⬇ 算法介入 ⬇</div>
+                        <div class="bg-slate-900 p-4 rounded text-center border border-slate-600">
+                            <span class="text-red-400 font-bold">商家 A 面临抉择：</span><br>
+                            降价至 $0.9 (继续亏本保流量) <br> <span class="text-slate-500">OR</span> <br> 拒绝降价 (被系统限流/下架)
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-4 leading-relaxed">**分析：** 平台通过图像识别自动抓取同款底价。供应商陷入无休止的“囚徒困境”，最终将制造环节毛利率压缩至不足 5%。</p>
+                </div>
+
+                <!-- JIT Penalty -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center"><span class="text-2xl mr-2">⚖️</span>JIT 模式下的严苛惩罚体系</h3>
+                    <p class="text-sm text-slate-600 mb-4">JIT（先出单后发货）虽缓解了商家的库存压力，但平台将延误风险转化为巨额罚款。</p>
+                    <div class="space-y-3">
+                        <div class="flex items-start bg-red-50 p-4 rounded-xl border border-red-100">
+                            <div class="text-red-500 mt-1 mr-3 text-lg">⚠️</div>
+                            <div><h4 class="font-bold text-red-800 text-sm">超时入库罚款</h4><p class="text-xs text-red-600 mt-1">要求出单后 48 小时内送达指定仓。迟到按单处以货值 1-5 倍罚款，迫使商家使用昂贵的顺丰专车。</p></div>
+                        </div>
+                        <div class="flex items-start bg-orange-50 p-4 rounded-xl border border-orange-100">
+                            <div class="text-orange-500 mt-1 mr-3 text-lg">❌</div>
+                            <div><h4 class="font-bold text-orange-800 text-sm">质检 (QC) 退回灾难</h4><p class="text-xs text-orange-600 mt-1">线头、微小色差均被判定不合格。整批货物被运费到付退回（退货运费极高），甚至面临违约金。</p></div>
+                        </div>
+                        <div class="flex items-start bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <div class="text-slate-500 mt-1 mr-3 text-lg">📉</div>
+                            <div><h4 class="font-bold text-slate-800 text-sm">爆款断货惩罚</h4><p class="text-xs text-slate-600 mt-1">若商品进入爆款池但产能跟不上导致缺货，商家面临直接清退和资金冻结的风险。</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. LOGISTICS MODELS -->
+        <section id="models" class="mb-24 pt-4">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-6 border-b pb-4 border-slate-200">
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-800 mb-2">3. 核心物流模式全景演进</h2>
+                    <p class="text-slate-600 text-sm">点击切换模式；点击时间轴节点 <strong>展开下钻</strong> 获取详尽数据分析与架构拆解。</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <!-- Tabs -->
+                <div class="flex border-b border-slate-200 bg-slate-50 sticky top-0 z-20">
+                    <button class="tab-btn active flex-1 py-5 px-2 md:px-6 text-center font-bold transition-colors hover:bg-white text-sm md:text-base" onclick="switchTab('full-managed')">🌐 全托管模式 (空运直邮)</button>
+                    <button class="tab-btn flex-1 py-5 px-2 md:px-6 text-center font-bold text-slate-500 transition-colors hover:bg-white text-sm md:text-base" onclick="switchTab('semi-managed')">🏬 半托管模式 (海外仓发)</button>
+                </div>
+                
+                <!-- Tab: Full Managed -->
+                <div id="full-managed" class="tab-content p-4 md:p-8 block">
+                    <div class="mb-10 p-5 rounded-xl bg-gradient-to-r from-blue-50 to-white border border-blue-100">
+                        <h3 class="text-xl font-black text-blue-900 mb-2">被政策重创的直邮网络 (萎缩中)</h3>
+                        <p class="text-slate-600 text-sm"><strong>核心逻辑：</strong> 曾经依靠极致集约化和 T86 免税支撑的轻小件直邮体系。目前受限于关税增加，仅保留高溢价极轻件，整体规模处于战略性缩减阶段。</p>
+                    </div>
+
+                    <div class="relative border-l-2 border-slate-200 ml-4 md:ml-8 py-2 space-y-10">
+                        
+                        <!-- FM Step 1 -->
+                        <div class="relative" id="container-fm-1">
+                            <div class="absolute -left-[21px] md:-left-[25px] top-6 w-10 h-10 rounded-full border-4 border-white bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-lg transition-all duration-300 z-10" id="node-fm-1">1</div>
+                            <div class="ml-8 md:ml-12 bg-white rounded-2xl shadow-sm border border-slate-200 transition-all duration-300" id="card-fm-1">
+                                <button class="w-full text-left p-6 group focus:outline-none" onclick="togglePipeline('fm-1', 'blue')">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <h4 class="text-xl font-bold text-slate-800 group-hover:text-blue-600 transition-colors">国内备货与集集 (First-mile)</h4>
+                                            <p class="text-sm text-slate-500 mt-1">VMI/JIT 模式并行，通过中心枢纽合包极大摊薄干线首重。</p>
+                                        </div>
+                                        <div class="flex items-center space-x-3"><span class="hidden md:inline-block px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full transition-colors duration-300" id="badge-fm-1">展开下钻</span><div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center transition-colors duration-300" id="iconbg-fm-1"><span class="transform transition-transform duration-300 text-slate-400 text-xs" id="icon-fm-1">▼</span></div></div>
+                                    </div>
+                                </button>
+                                
+                                <div id="content-fm-1" class="accordion-content bg-slate-50/50">
+                                    <div class="p-6 md:p-8 border-t border-slate-100">
+                                        <h5 class="text-lg font-bold text-slate-800 mb-6 flex items-center"><span class="w-1 h-5 bg-blue-500 rounded mr-3"></span>国内仓网结构与作业流拆解</h5>
+                                        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
+                                            <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                                                <h6 class="font-bold text-base text-blue-800 mb-3 flex items-center">🏬 VMI 备货仓 (先备货后出单)</h6>
+                                                <p class="text-xs text-slate-500 mb-4 h-auto md:h-8">场景：稳定爆款。履约时效极高，平台掌握绝对库存。</p>
+                                                <div class="bg-slate-50 p-4 rounded-lg border border-slate-100 text-center text-xs font-medium space-y-2">
+                                                    <div class="bg-white border border-blue-200 p-2 rounded shadow-sm text-slate-700">📦 1. 商家打条码、大批量发货入库</div>
+                                                    <div class="text-blue-400 text-lg">⬇</div>
+                                                    <div class="bg-white border border-blue-200 p-2 rounded shadow-sm text-slate-700">✅ 2. 平台收货、质检 (QC)、上架储位</div>
+                                                    <div class="text-blue-400 text-lg">⬇</div>
+                                                    <div class="bg-blue-600 text-white p-2 rounded shadow-md">🛒 3. 买家下单，WMS 秒级生成出库指令</div>
+                                                </div>
+                                            </div>
+                                            <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                                                <h6 class="font-bold text-base text-orange-600 mb-3 flex items-center">⏱️ JIT 虚拟仓 (先出单后发货)</h6>
+                                                <p class="text-xs text-slate-500 mb-4 h-auto md:h-8">场景：新款测款期。不占储位，极大降低备货资金压力。</p>
+                                                <div class="bg-slate-50 p-4 rounded-lg border border-slate-100 text-center text-xs font-medium space-y-2">
+                                                    <div class="bg-orange-500 text-white p-2 rounded shadow-md">🛒 1. 买家下单 (消耗预设虚拟库存)</div>
+                                                    <div class="text-orange-400 text-lg">⬇</div>
+                                                    <div class="bg-white border border-orange-200 p-2 rounded shadow-sm text-slate-700">📦 2. 商家紧急拣货、贴专属面单</div>
+                                                    <div class="text-orange-400 text-lg">⬇</div>
+                                                    <div class="bg-white border border-orange-200 p-2 rounded shadow-sm text-slate-700">⚡ 3. 专线压线送达，快进快出扫码即走</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-slate-800 rounded-xl p-6 text-white shadow-lg relative overflow-hidden">
+                                            <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+                                            <h6 class="font-bold text-lg mb-4 relative z-10">🔀 中心转运枢纽：智能合包 (Consolidation)</h6>
+                                            <p class="text-sm text-slate-300 mb-6 relative z-10">平台降本的核心黑洞。汇集全网包裹，将同买家跨店订单物理合并。</p>
+                                            <div class="bg-slate-900/80 p-5 rounded-lg border border-slate-700 flex flex-col md:flex-row items-center justify-between text-sm text-center space-y-3 md:space-y-0 relative z-10">
+                                                <div class="bg-slate-800 border border-slate-600 p-3 rounded-lg w-full md:w-auto">⚖️ 过磅安检</div>
+                                                <div class="text-slate-500 font-bold hidden md:block">➡</div>
+                                                <div class="bg-indigo-600 border border-indigo-400 p-3 rounded-lg w-full md:w-auto font-bold shadow-[0_0_15px_rgba(79,70,229,0.5)]">🤝 跨店同单合包</div>
+                                                <div class="text-slate-500 font-bold hidden md:block">➡</div>
+                                                <div class="bg-slate-800 border border-slate-600 p-3 rounded-lg w-full md:w-auto">🏷️ 二次封装装袋</div>
+                                                <div class="text-slate-500 font-bold hidden md:block">➡</div>
+                                                <div class="bg-green-700 border border-green-500 p-3 rounded-lg w-full md:w-auto text-white">✈️ 按目的国交航</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FM Step 2 -->
+                        <div class="relative" id="container-fm-2">
+                            <div class="absolute -left-[21px] md:-left-[25px] top-6 w-10 h-10 rounded-full border-4 border-white bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-lg transition-all duration-300 z-10" id="node-fm-2">2</div>
+                            <div class="ml-8 md:ml-12 bg-white rounded-2xl shadow-sm border border-slate-200 transition-all duration-300" id="card-fm-2">
+                                <button class="w-full text-left p-6 group focus:outline-none" onclick="togglePipeline('fm-2', 'blue')">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <h4 class="text-xl font-bold text-slate-800 group-hover:text-blue-600 transition-colors">干线空运网络 (Line-haul)</h4>
+                                            <p class="text-sm text-slate-500 mt-1">目前运力需求随政策缩减，包板长协逐步向外释放转租。</p>
+                                        </div>
+                                        <div class="flex items-center space-x-3"><span class="hidden md:inline-block px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full transition-colors duration-300" id="badge-fm-2">展开下钻</span><div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center transition-colors duration-300" id="iconbg-fm-2"><span class="transform transition-transform duration-300 text-slate-400 text-xs" id="icon-fm-2">▼</span></div></div>
+                                    </div>
+                                </button>
+                                <div id="content-fm-2" class="accordion-content bg-slate-50/50">
+                                    <div class="p-6 md:p-8 border-t border-slate-100">
+                                        <h5 class="text-lg font-bold text-slate-800 mb-6 flex items-center"><span class="w-1 h-5 bg-blue-500 rounded mr-3"></span>干线运力网络与包板矩阵拆解</h5>
+                                        
+                                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                                            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center opacity-70"><div class="text-xs text-slate-400 font-bold mb-1">当前日均出货吨位(断崖下降)</div><div class="text-2xl font-black text-slate-600">~1,500<span class="text-sm">吨</span></div></div>
+                                            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center"><div class="text-xs text-slate-400 font-bold mb-1">折合B777F货机</div><div class="text-2xl font-black text-blue-600">~15<span class="text-sm">架/日</span></div></div>
+                                            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center"><div class="text-xs text-slate-400 font-bold mb-1">华南出港占比</div><div class="text-2xl font-black text-orange-500">30%+</div></div>
+                                            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center"><div class="text-xs text-slate-400 font-bold mb-1">长协包板锁定率(正急需转让)</div><div class="text-2xl font-black text-indigo-600">75%</div></div>
+                                        </div>
+
+                                        <h6 class="font-bold text-lg text-slate-800 mb-4">核心运力采购模式 (组合拳)</h6>
+                                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
+                                            <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                                                <div class="flex justify-between items-center mb-3"><span class="font-bold text-blue-800">包板 (BSA)</span><span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">主力 60%</span></div>
+                                                <p class="text-xs text-slate-600 mb-3 h-12">与航司签长协买断舱位。因免税取消导致单量暴跌，目前正面临高额空舱赔付或低价转租市场的巨大风险。</p>
+                                            </div>
+                                            <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                                                <div class="flex justify-between items-center mb-3"><span class="font-bold text-orange-600">全货包机 (Charter)</span><span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">主干 30%</span></div>
+                                                <p class="text-xs text-slate-600 mb-3 h-12">整租宽体货机。过去的高利润基石，如今班次正在大量削减。</p>
+                                            </div>
+                                            <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                                                <div class="flex justify-between items-center mb-3"><span class="font-bold text-slate-800">现货散采 (Ad-hoc)</span><span class="bg-slate-100 text-slate-800 text-xs px-2 py-1 rounded">缓冲 10%</span></div>
+                                                <p class="text-xs text-slate-600 mb-3 h-12">大促爆仓时向市场高价买舱。目前几乎完全停止采购。</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                                                <h6 class="font-bold text-sm text-slate-700 mb-4">运量 vs 美线空运均价趋势分析</h6>
+                                                <div class="chart-container !h-64"><canvas id="fmLinehaulChart1"></canvas></div>
+                                            </div>
+                                            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                                                <h6 class="font-bold text-sm text-slate-700 mb-4">承运商网络份额预估</h6>
+                                                <div class="chart-container !h-64"><canvas id="fmLinehaulChart2"></canvas></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FM Step 3 -->
+                        <div class="relative" id="container-fm-3">
+                            <div class="absolute -left-[21px] md:-left-[25px] top-6 w-10 h-10 rounded-full border-4 border-white bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-lg transition-all duration-300 z-10" id="node-fm-3">3</div>
+                            <div class="ml-8 md:ml-12 bg-white rounded-2xl shadow-sm border border-slate-200 transition-all duration-300" id="card-fm-3">
+                                <button class="w-full text-left p-6 group focus:outline-none" onclick="togglePipeline('fm-3', 'blue')">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <h4 class="text-xl font-bold text-slate-800 group-hover:text-blue-600 transition-colors">海外清关与尾程派送 (Last-mile)</h4>
+                                            <p class="text-sm text-slate-500 mt-1"><span class="text-red-600 font-bold">【重大变化】</span> T86 免税特权正式终结，跨境小包全面转向正规/简易报关纳税。</p>
+                                        </div>
+                                        <div class="flex items-center space-x-3"><span class="hidden md:inline-block px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full transition-colors duration-300" id="badge-fm-3">展开下钻</span><div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center transition-colors duration-300" id="iconbg-fm-3"><span class="transform transition-transform duration-300 text-slate-400 text-xs" id="icon-fm-3">▼</span></div></div>
+                                    </div>
+                                </button>
+                                <div id="content-fm-3" class="accordion-content bg-slate-50/50">
+                                    <div class="p-6 md:p-8 border-t border-slate-100">
+                                        <h5 class="text-lg font-bold text-slate-800 mb-6 flex items-center"><span class="w-1 h-5 bg-blue-500 rounded mr-3"></span>合规博弈与逆向物流重构</h5>
+                                        
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                            <div class="bg-white p-6 border border-red-300 rounded-xl shadow-md relative overflow-hidden">
+                                                <div class="absolute top-0 right-0 w-2 h-full bg-red-500"></div>
+                                                <h6 class="font-bold text-slate-800 mb-3 text-lg">🛂 T86 免税特权的彻底终结</h6>
+                                                <p class="text-sm text-slate-600 mb-3">曾经直邮 100% 依赖美国 Section 321 (Type 86) 免税法案。<strong class="text-red-700">最新现状：</strong> 2025-2026年，美国已正式暂停该免税待遇。</p>
+                                                <div class="bg-red-50 p-3 rounded-lg text-xs text-red-800 border border-red-100 font-medium">
+                                                    致命打击：所有跨境小包现在必须进行简易/正式报关并缴纳关税及清关附加费，直邮单票成本暴增，倒逼平台将核心战略全面向半托管海外仓转移。
+                                                </div>
+                                            </div>
+                                            <div class="bg-white p-6 border border-slate-200 rounded-xl shadow-sm relative overflow-hidden">
+                                                <div class="absolute top-0 right-0 w-2 h-full bg-slate-400"></div>
+                                                <h6 class="font-bold text-slate-800 mb-3 text-lg">♻️ 逆向物流：为何“仅退款”？</h6>
+                                                <p class="text-sm text-slate-600 mb-3">全托管客单价极低。退回中国的物流成本远超商品成本（绝对倒挂）。加上关税后，退回更是天方夜谭。</p>
+                                                <div class="bg-slate-100 p-3 rounded-lg text-xs text-slate-700 border border-slate-200 font-medium">
+                                                    处理方式：低货值商品直接“仅退款”或交由本地销毁中心集中粉碎，断绝物理退回路径。
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <h6 class="font-bold text-lg text-slate-800 mb-4">尾程终极降本：跳区集货 (Zone Skipping) 策略</h6>
+                                        <div class="bg-blue-900 p-6 rounded-xl text-white shadow-inner flex flex-col md:flex-row gap-4 text-center">
+                                            <div class="flex-1 bg-blue-800/50 p-4 rounded-lg border border-blue-700 backdrop-blur-sm">
+                                                <div class="font-bold text-orange-400 mb-2">1. 航班直飞腹地</div>
+                                                <p class="text-xs text-blue-200">包机避开拥堵沿海，直飞芝加哥、达拉斯等内陆中枢。</p>
+                                            </div>
+                                            <div class="flex-1 bg-blue-800/50 p-4 rounded-lg border border-blue-700 backdrop-blur-sm">
+                                                <div class="font-bold text-blue-300 mb-2">2. 本地卡车干线接驳</div>
+                                                <p class="text-xs text-blue-200">清关纳税后拉至距消费者最近的 USPS 目的地分拣局(DDU)。</p>
+                                            </div>
+                                            <div class="flex-1 bg-blue-800/50 p-4 rounded-lg border border-blue-700 backdrop-blur-sm">
+                                                <div class="font-bold text-green-400 mb-2">3. 极低尾程折扣率</div>
+                                                <p class="text-xs text-blue-200">USPS 仅负责最后几公里，收取最低档位的投递折扣费。</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Semi Managed -->
+                <div id="semi-managed" class="tab-content p-4 md:p-8 hidden">
+                    <div class="mb-10 p-5 rounded-xl bg-gradient-to-r from-orange-50 to-white border border-orange-100">
+                        <h3 class="text-xl font-black text-orange-900 mb-2">被逼出的全新主阵地：重资产出海与本土极速履约</h3>
+                        <p class="text-slate-600 text-sm"><strong>核心逻辑：</strong> 在免税取消的残酷现实下，这是目前**唯一合规且能在美国跑通**的模式。平台仅负责流量，<strong>商家全面接管重资产的物理供应链</strong>。利用一般贸易海运+海外实体仓，实现大件/高价商品的 Prime 级交付。</p>
+                    </div>
+
+                    <div class="relative border-l-2 border-slate-200 ml-4 md:ml-8 py-2 space-y-10">
+                        
+                        <!-- SM Step 1 -->
+                        <div class="relative" id="container-sm-1">
+                            <div class="absolute -left-[21px] md:-left-[25px] top-6 w-10 h-10 rounded-full border-4 border-white bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-lg transition-all duration-300 z-10" id="node-sm-1">1</div>
+                            <div class="ml-8 md:ml-12 bg-white rounded-2xl shadow-sm border border-slate-200 transition-all duration-300" id="card-sm-1">
+                                <button class="w-full text-left p-6 group focus:outline-none" onclick="togglePipeline('sm-1', 'orange')">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <h4 class="text-xl font-bold text-slate-800 group-hover:text-orange-500 transition-colors">头程集装箱海运 (Ocean Freight)</h4>
+                                            <p class="text-sm text-slate-500 mt-1">干线成本骤降至“美分级”，但需忍受长达 80 天的资金链极限施压。</p>
+                                        </div>
+                                        <div class="flex items-center space-x-3"><span class="hidden md:inline-block px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full transition-colors duration-300" id="badge-sm-1">展开下钻</span><div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center transition-colors duration-300" id="iconbg-sm-1"><span class="transform transition-transform duration-300 text-slate-400 text-xs" id="icon-sm-1">▼</span></div></div>
+                                    </div>
+                                </button>
+                                <div id="content-sm-1" class="accordion-content bg-slate-50/50">
+                                    <div class="p-6 md:p-8 border-t border-slate-100">
+                                        <h5 class="text-lg font-bold text-slate-800 mb-6 flex items-center"><span class="w-1 h-5 bg-orange-500 rounded mr-3"></span>海运头程经济学与资金周转分析</h5>
+                                        
+                                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                                            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                                                <h6 class="font-bold text-slate-800 mb-4 border-b pb-2">颠覆性的成本结构转移</h6>
+                                                <ul class="text-sm text-slate-600 space-y-4">
+                                                    <li class="flex justify-between items-center bg-red-50 p-2 rounded"><span class="text-slate-600">空运干线均价 (全托管)</span> <strong class="text-red-500 text-lg">~$6.0 / kg</strong></li>
+                                                    <li class="flex justify-between items-center bg-green-50 p-2 rounded"><span class="text-slate-600">海运干线均价 (半托管)</span> <strong class="text-green-600 text-lg">~$0.3 / kg</strong></li>
+                                                </ul>
+                                                <p class="mt-4 text-xs text-slate-500 leading-relaxed">这不仅是为了合规避税，也使得扫地机、家具等体积重极大的商品首次具备了跨境电商维度的盈利可行性。</p>
+                                            </div>
+                                            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                                                <h6 class="font-bold text-slate-800 mb-4 border-b pb-2">极其严苛的资金链流转周期</h6>
+                                                <ul class="text-sm text-slate-600 space-y-3">
+                                                    <li class="flex justify-between items-center"><span>工厂排期与生产制造</span> <strong>15-20天</strong></li>
+                                                    <li class="flex justify-between items-center"><span>海运在途与塞港清关</span> <strong>30-45天</strong></li>
+                                                    <li class="flex justify-between items-center"><span>海外仓上架与销售回款</span> <strong>15-30天</strong></li>
+                                                </ul>
+                                                <div class="mt-4 text-xs bg-orange-50 p-3 rounded-lg text-orange-800 font-medium border border-orange-100">
+                                                    单批次货款资金被占用长达 60-90 天，极其考验商家的现金流底盘与爆款预测能力。
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SM Step 2 -->
+                        <div class="relative" id="container-sm-2">
+                            <div class="absolute -left-[21px] md:-left-[25px] top-6 w-10 h-10 rounded-full border-4 border-white bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-lg transition-all duration-300 z-10" id="node-sm-2">2</div>
+                            <div class="ml-8 md:ml-12 bg-white rounded-2xl shadow-sm border border-slate-200 transition-all duration-300" id="card-sm-2">
+                                <button class="w-full text-left p-6 group focus:outline-none" onclick="togglePipeline('sm-2', 'orange')">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <h4 class="text-xl font-bold text-slate-800 group-hover:text-orange-500 transition-colors">一般贸易进口与实体海外仓 (WMS)</h4>
+                                            <p class="text-sm text-slate-500 mt-1">商家全盘承接合规关税风险；打通系统 API 实现海外本土直发。</p>
+                                        </div>
+                                        <div class="flex items-center space-x-3"><span class="hidden md:inline-block px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full transition-colors duration-300" id="badge-sm-2">展开下钻</span><div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center transition-colors duration-300" id="iconbg-sm-2"><span class="transform transition-transform duration-300 text-slate-400 text-xs" id="icon-sm-2">▼</span></div></div>
+                                    </div>
+                                </button>
+                                <div id="content-sm-2" class="accordion-content bg-slate-50/50">
+                                    <div class="p-6 md:p-8 border-t border-slate-100">
+                                        <h5 class="text-lg font-bold text-slate-800 mb-6 flex items-center"><span class="w-1 h-5 bg-orange-500 rounded mr-3"></span>唯一合规路径：大贸清关与 API 数据流</h5>
+                                        
+                                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6">
+                                            <h6 class="font-bold text-slate-800 mb-3 text-lg">⚖️ 风险彻底前置：一般贸易进口 (General Trade)</h6>
+                                            <p class="text-sm text-slate-600 mb-4">Temu 成功将所有“清关合规”与“关税”甩给卖家。商家作为 Importer of Record 进行海运整柜报关，合法合规地化解了平台的政策风险。</p>
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                                <div class="p-4 bg-red-50/50 rounded-lg border border-red-100">
+                                                    <strong class="text-red-700 block mb-1">显性成本激增</strong>需依法缴纳目的地国家的进口关税 (Tariffs，部分类目如301关税高达25%)。
+                                                </div>
+                                                <div class="p-4 bg-red-50/50 rounded-lg border border-red-100">
+                                                    <strong class="text-red-700 block mb-1">合规认证严查</strong>FDA、FCC 等认证缺一不可，侵权仿牌将面临整柜被海关没收销毁。
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <h6 class="font-bold text-slate-800 mb-4 text-lg">🏬 仓网协同：Temu 与第三方 WMS 联动流</h6>
+                                        <div class="bg-slate-800 p-6 rounded-xl text-white shadow-inner flex flex-col md:flex-row items-center justify-between text-sm text-center">
+                                            <div class="bg-slate-700 p-4 rounded-lg border border-slate-600 w-full md:w-1/4">
+                                                <div class="font-bold text-orange-400 mb-1">Temu 前端平台</div>
+                                                <div class="text-xs text-slate-300">买家下单，产生订单</div>
+                                            </div>
+                                            <div class="text-slate-400 font-bold my-2 md:my-0">➡ API 推送 ➡</div>
+                                            <div class="bg-indigo-900 p-4 rounded-lg border border-indigo-500 w-full md:w-1/4 shadow-[0_0_20px_rgba(79,70,229,0.3)]">
+                                                <div class="font-bold text-white mb-1">商家第三方 WMS</div>
+                                                <div class="text-xs text-indigo-200">(如谷仓)扣减库存打单</div>
+                                            </div>
+                                            <div class="text-slate-400 font-bold my-2 md:my-0">➡ 实物出库 ➡</div>
+                                            <div class="bg-slate-700 p-4 rounded-lg border border-slate-600 w-full md:w-1/4">
+                                                <div class="font-bold text-green-400 mb-1">海外发货月台</div>
+                                                <div class="text-xs text-slate-300">贴本土面单待揽收</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SM Step 3 -->
+                        <div class="relative" id="container-sm-3">
+                            <div class="absolute -left-[21px] md:-left-[25px] top-6 w-10 h-10 rounded-full border-4 border-white bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-lg transition-all duration-300 z-10" id="node-sm-3">3</div>
+                            <div class="ml-8 md:ml-12 bg-white rounded-2xl shadow-sm border border-slate-200 transition-all duration-300" id="card-sm-3">
+                                <button class="w-full text-left p-6 group focus:outline-none" onclick="togglePipeline('sm-3', 'orange')">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <h4 class="text-xl font-bold text-slate-800 group-hover:text-orange-500 transition-colors">本土极速派送与高价值逆向挽回</h4>
+                                            <p class="text-sm text-slate-500 mt-1">依托 FedEx/UPS 实现 2-5 天 Prime 级交付；退货经翻新二次上架。</p>
+                                        </div>
+                                        <div class="flex items-center space-x-3"><span class="hidden md:inline-block px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full transition-colors duration-300" id="badge-sm-3">展开下钻</span><div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center transition-colors duration-300" id="iconbg-sm-3"><span class="transform transition-transform duration-300 text-slate-400 text-xs" id="icon-sm-3">▼</span></div></div>
+                                    </div>
+                                </button>
+                                <div id="content-sm-3" class="accordion-content bg-slate-50/50">
+                                    <div class="p-6 md:p-8 border-t border-slate-100">
+                                        <h5 class="text-lg font-bold text-slate-800 mb-6 flex items-center"><span class="w-1 h-5 bg-orange-500 rounded mr-3"></span>尾程运费博弈与二次商业循环</h5>
+                                        
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                                                <h6 class="font-bold text-slate-800 mb-3">🚚 官方运费 vs 自有账号博弈</h6>
+                                                <p class="text-sm text-slate-600 mb-3">大件商品基础运费极高。商家可使用自有 FedEx 折扣，也可借用 Temu 官方集中采购的超级折扣价打单（平台借此进一步绑定商家）。</p>
+                                            </div>
+                                            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                                                <h6 class="font-bold text-slate-800 mb-3">🗺️ 分仓策略对冲 Zone 计费</h6>
+                                                <p class="text-sm text-slate-600">美国本土按距离分 Zone 1-8。发往偏远 Zone 运费甚至侵吞利润。成熟大卖采取“美西+美东+美南”多仓布局以大幅降维本地运费。</p>
+                                            </div>
+                                        </div>
+
+                                        <h6 class="font-bold text-slate-800 mb-4 text-lg">♻️ 核心商业壁垒：高价值商品的逆向挽回循环</h6>
+                                        <div class="bg-emerald-50 border border-emerald-200 p-6 rounded-xl">
+                                            <p class="text-sm text-slate-700 mb-5 font-medium">半托管主营高价值大件（如家具家电）。逆向退换货的处理能力直接决定利润池。</p>
+                                            <div class="flex flex-col md:flex-row items-center justify-between text-center text-sm">
+                                                <div class="bg-white border border-slate-200 p-4 rounded-lg shadow-sm w-full md:w-[30%]">1. 买家退回指定海外仓</div>
+                                                <div class="text-emerald-500 font-bold my-2 md:my-0">➡</div>
+                                                <div class="bg-white border border-emerald-300 p-4 rounded-lg shadow-sm w-full md:w-[30%]">2. 仓内开箱质检与分级</div>
+                                                <div class="text-emerald-500 font-bold my-2 md:my-0">➡</div>
+                                                <div class="bg-emerald-600 text-white p-4 rounded-lg shadow-md w-full md:w-[30%] font-bold">3. 翻新换标，二次上架售卖</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. UNIT ECONOMICS -->
+        <section id="ue" class="mb-24 pt-4">
+            <h2 class="text-3xl font-bold mb-6 text-slate-800 border-b pb-2 border-slate-200">4. 单票财务模型 (Unit Economics) 深度剖析</h2>
+            <p class="text-slate-600 mb-6 leading-relaxed">随着免税红利的终结，物流履约的经济账正在被彻底重写。我们以估算的 **全托管（轻小件 $40）** 和 **半托管（大件 $80）** 典型订单为例，拆解其成本与利润结构的本质区别。</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- UE Model 1 -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-blue-500"></div>
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-bold text-slate-800">模型 A：全托管直邮 ($40 标品小件)</h3>
+                        <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded font-normal whitespace-nowrap ml-2">受免税取消重创</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-6">高昂的空运+新增关税，使得该模型几乎面临利润清零。</p>
+                    <div class="w-full h-8 bg-slate-100 rounded-full flex overflow-hidden mb-4 shadow-inner">
+                        <div class="bg-slate-700 h-full flex items-center justify-center text-white text-xs font-bold" style="width: 25%;" title="商品: 25%">商(25%)</div>
+                        <div class="bg-blue-500 h-full flex items-center justify-center text-white text-xs font-bold" style="width: 30%;" title="物流: 30%">物流(30%)</div>
+                        <div class="bg-red-500 h-full flex items-center justify-center text-white text-xs font-bold" style="width: 10%;" title="新增关税: 10%">税(10%)</div>
+                        <div class="bg-pink-500 h-full flex items-center justify-center text-white text-xs font-bold" style="width: 25%;" title="营销: 25%">营销(25%)</div>
+                        <div class="bg-green-500 h-full flex items-center justify-center text-white text-[10px] font-bold" style="width: 10%;" title="毛利(压缩): 10%">利(10%)</div>
+                    </div>
+                    <div class="text-sm text-slate-600 space-y-2">
+                        <div class="flex justify-between border-b border-slate-100 pb-1"><span>商品供货成本 (COGS)</span> <strong>$10.0 (25%)</strong></div>
+                        <div class="flex justify-between border-b border-slate-100 pb-1"><span>空运与尾程物流</span> <strong class="text-blue-600">$12.0 (30%)</strong></div>
+                        <div class="flex justify-between border-b border-slate-100 pb-1"><span class="text-red-600 font-bold">新增：报关费与进口关税</span> <strong class="text-red-600">$4.0 (10%)</strong></div>
+                        <div class="flex justify-between border-b border-slate-100 pb-1"><span>前端流量采买 (CAC)</span> <strong>$10.0 (25%)</strong></div>
+                        <div class="flex justify-between pt-1"><span class="font-bold text-slate-800">平台预估毛利 (大幅缩水)</span> <strong class="text-green-600">$4.0 (10%)</strong></div>
+                    </div>
+                    <div class="mt-4 p-2 bg-red-50 border border-red-100 rounded text-xs text-red-800">
+                        *最新现状：受美国 800 美元免税取消影响，直邮需额外承担按件报关费及关税，该模型目前处于战略性亏损，平台正加速缩减其业务权重。
+                    </div>
+                </div>
+
+                <!-- UE Model 2 -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-orange-500"></div>
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-bold text-slate-800">模型 B：半托管海外仓 ($80 大件商品)</h3>
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded font-normal whitespace-nowrap ml-2">当前唯一合规路径</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-6">高货值承载本土高昂尾程，海运释放巨额物流利润空间。</p>
+                    <div class="w-full h-8 bg-slate-100 rounded-full flex overflow-hidden mb-4 shadow-inner">
+                        <div class="bg-slate-700 h-full flex items-center justify-center text-white text-[10px] font-bold" style="width: 37.5%;">商+一般关税(37%)</div>
+                        <div class="bg-orange-600 h-full flex items-center justify-center text-white text-[10px] font-bold" style="width: 12.5%;">海运(12%)</div>
+                        <div class="bg-blue-600 h-full flex items-center justify-center text-white text-[10px] font-bold" style="width: 18.75%;">尾程(19%)</div>
+                        <div class="bg-pink-500 h-full flex items-center justify-center text-white text-[10px] font-bold" style="width: 12.5%;">营销(12%)</div>
+                        <div class="bg-green-500 h-full flex items-center justify-center text-white text-[10px] font-bold" style="width: 18.75%;">毛利(19%)</div>
+                    </div>
+                    <div class="text-sm text-slate-600 space-y-2">
+                        <div class="flex justify-between border-b border-slate-100 pb-1"><span>商品及一般贸易关税 (COGS)</span> <strong>$30.0 (37.5%)</strong></div>
+                        <div class="flex justify-between border-b border-slate-100 pb-1"><span>海运干线及WMS仓储</span> <strong class="text-orange-600">$10.0 (12.5%)</strong></div>
+                        <div class="flex justify-between border-b border-slate-100 pb-1"><span>FedEx 本土派送</span> <strong class="text-blue-600">$15.0 (18.7%)</strong></div>
+                        <div class="flex justify-between border-b border-slate-100 pb-1"><span>前端流量采买</span> <strong>$10.0 (12.5%)</strong></div>
+                        <div class="flex justify-between pt-1"><span class="font-bold text-slate-800">商家端预估毛利</span> <strong class="text-green-600">$15.0 (18.7%)</strong></div>
+                    </div>
+                    <div class="mt-4 p-2 bg-slate-50 border border-slate-100 rounded text-xs text-slate-500">
+                        *由于采用一般贸易进口（拼箱/整柜统一交税），完美规避了针对直邮小包的惩罚性政策。虽然资金周转长，但利润天花板远超直邮。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. GLOBAL COMPLIANCE -->
+        <section id="global" class="mb-24 pt-4">
+            <h2 class="text-3xl font-bold mb-6 text-slate-800 border-b pb-2 border-slate-200">5. 全球区域市场合规与履约差异</h2>
+            <p class="text-slate-600 mb-6 leading-relaxed">离开美国本土，不同地缘下的物流合规成本呈指数级差异。</p>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="flex flex-wrap border-b border-slate-200 bg-slate-800">
+                    <button class="region-btn active flex-1 py-4 px-2 md:px-4 text-center text-slate-400 font-bold transition-colors hover:text-white hover:bg-slate-700 text-xs md:text-sm" onclick="switchRegion('region-eu')">🇪🇺 欧洲大区 (EU/UK)</button>
+                    <button class="region-btn flex-1 py-4 px-2 md:px-4 text-center text-slate-400 font-bold transition-colors hover:text-white hover:bg-slate-700 text-xs md:text-sm" onclick="switchRegion('region-latam')">🇧🇷 拉美大区 (LatAm)</button>
+                    <button class="region-btn flex-1 py-4 px-2 md:px-4 text-center text-slate-400 font-bold transition-colors hover:text-white hover:bg-slate-700 text-xs md:text-sm" onclick="switchRegion('region-me')">🇦🇪 中东大区 (Middle East)</button>
+                </div>
+                <!-- Region: EU -->
+                <div id="region-eu" class="region-content p-6 md:p-8 block">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4">严刑峻法：合规为王的市场</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-bold text-blue-800 mb-2 border-b border-blue-100 pb-1">📜 税务与环保双枷锁</h4>
+                            <p class="text-sm text-slate-600 mb-2"><strong>IOSS：</strong> 取消 22 欧元免税门槛。必须在结账时向买家代扣约 20% VAT。</p>
+                            <p class="text-sm text-slate-600"><strong>EPR 政策：</strong> 包装法/WEEE，未注册即遭海关销毁，合规沉没成本极高。</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-blue-800 mb-2 border-b border-blue-100 pb-1">🚚 打破邮政垄断</h4>
+                            <p class="text-sm text-slate-600">接入 Evri (英国)、Hermes、DPD 等区域快递，以列日(LGG)为跳板实现卡班多国通达。</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Region: LatAm -->
+                <div id="region-latam" class="region-content p-6 md:p-8 hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-bold text-green-800 mb-2 border-b border-green-100 pb-1">💰 巴西 Remessa Conforme 税改</h4>
+                            <p class="text-sm text-slate-600">50美元以下缴 17% 州流转税；50美元以上面临高达 92% 综合税率，扼杀高客单价直邮空间。</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-green-800 mb-2 border-b border-green-100 pb-1">🛡️ 极高的安全与丢包率</h4>
+                            <p class="text-sm text-slate-600">尾程治安差，丢件率可达 5-8%，须支付巨额仅退款赔付。</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Region: ME -->
+                <div id="region-me" class="region-content p-6 md:p-8 hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-bold text-orange-800 mb-2 border-b border-orange-100 pb-1">💵 COD (货到付款) 灾难</h4>
+                            <p class="text-sm text-slate-600">因信任问题高度依赖现金，拒收率达 15-30%，产生极其可怕的逆向沉没成本。</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-orange-800 mb-2 border-b border-orange-100 pb-1">✈️ 沙特 SABER 认证壁垒</h4>
+                            <p class="text-sm text-slate-600">清关认证繁琐，迫使平台在利雅得/迪拜建立重资产保税前置仓体系。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. AI ARCHITECTURE -->
+        <section id="ai" class="mb-24 pt-4">
+            <h2 class="text-3xl font-bold mb-6 text-slate-800 border-b pb-2 border-slate-200">6. 数据与算法底座：AI 驱动的动态供应链</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- AI Feature 1 -->
+                <div class="bg-slate-900 p-6 rounded-2xl text-white shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-20"></div>
+                    <div class="flex items-center mb-4">
+                        <div class="text-3xl mr-3 text-blue-400">🤖</div>
+                        <h3 class="text-xl font-bold">销量预测与动态 JIT</h3>
+                    </div>
+                    <p class="text-sm text-slate-300 mb-4">基于历史与广告投放 ROI，AI 实时测算 72 小时单量，动态下发生产指令。</p>
+                    <div class="bg-slate-800 p-4 border border-slate-700 rounded-lg text-xs font-mono text-blue-300">
+                        IF (Forecast_Sales > Supplier_Cap) {<br>
+                        &nbsp;&nbsp;Throttle_Ad_Traffic();<br>
+                        } ELSE {<br>
+                        &nbsp;&nbsp;Generate_JIT_Orders();<br>
+                        }
+                    </div>
+                </div>
+                <!-- AI Feature 2: 3D Packing -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="flex items-center mb-4"><div class="text-3xl mr-3">🧩</div><h3 class="text-xl font-bold text-slate-800">三维装箱算法 (3D Bin Packing)</h3></div>
+                    <p class="text-sm text-slate-600 mb-4">在分拨中心，算法毫秒级计算最优拼接，极限压榨航空托盘空间，减少“抛货”空载率。</p>
+                    <div class="w-full h-40 bg-slate-100 border-2 border-slate-300 rounded relative overflow-hidden flex items-end p-2 gap-1 shadow-inner" id="packing-container">
+                        <div class="bg-blue-500 w-1/4 h-24 rounded bin-pack-item border border-blue-600 flex items-center justify-center text-white text-xs font-bold shadow-md">包裹A</div>
+                        <div class="bg-orange-500 w-1/5 h-16 rounded bin-pack-item delay-1 border border-orange-600 flex items-center justify-center text-white text-xs font-bold shadow-md">包裹B</div>
+                        <div class="flex-col w-1/4 space-y-1">
+                            <div class="bg-emerald-500 w-full h-12 rounded bin-pack-item delay-2 flex items-center justify-center text-white text-xs font-bold shadow-md">包C</div>
+                            <div class="bg-purple-500 w-full h-10 rounded bin-pack-item delay-3 flex items-center justify-center text-white text-xs font-bold shadow-md">包D</div>
+                        </div>
+                        <div class="bg-slate-700 w-1/4 h-20 rounded bin-pack-item delay-4 flex items-center justify-center text-white text-xs font-bold shadow-md">包E</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. MACRO PERFORMANCE -->
+        <section id="performance" class="mb-24 pt-4">
+            <h2 class="text-3xl font-bold mb-6 text-slate-800 border-b pb-2 border-slate-200">7. 平台宏观成本结构与履约时效走势</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-bold text-center text-slate-800 mb-2">全托管直邮成本极速恶化 (叠加关税后)</h3>
+                    <div class="chart-container"><canvas id="generalCostChart"></canvas></div>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-bold text-center text-slate-800 mb-2">跨境行业履约时效横向对比</h3>
+                    <div class="chart-container"><canvas id="generalSlaChart"></canvas></div>
+                </div>
+            </div>
+            <!-- Dynamic Trend -->
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="text-lg font-bold text-center text-slate-800 mb-4">两种模式下的履约时效历史与预测走势</h3>
+                <div class="chart-container !h-64"><canvas id="slaTrendChart"></canvas></div>
+            </div>
+        </section>
+
+        <!-- 8. ESG & RISKS -->
+        <section id="esg" class="mb-24 pt-4">
+            <h2 class="text-3xl font-bold mb-6 text-slate-800 border-b pb-2 border-slate-200">8. 宏观政策冲击与 ESG 挑战</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl border-t-4 border-red-500 shadow-sm">
+                    <div class="text-4xl mb-4">⚖️</div>
+                    <h3 class="font-bold text-slate-800 text-lg mb-2">已落地的 De Minimis 终结</h3>
+                    <p class="text-sm text-slate-600">美国政府已于 2025-2026 年间正式暂停 800 美元小包免税政策。直邮模式的高昂关税与清关摩擦，迫使平台唯一的出路就是大规模转向半托管海外仓。</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border-t-4 border-emerald-500 shadow-sm">
+                    <div class="text-4xl mb-4">🌍</div>
+                    <h3 class="font-bold text-slate-800 text-lg mb-2">CBAM 碳边境税与包装黑洞</h3>
+                    <p class="text-sm text-slate-600">每天数千吨商品依赖极高碳排放的航空运输，违背全球减碳趋势。欧盟正在推进的 CBAM 一旦覆盖至轻工消费品，平台将面临天文数字罚单。</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border-t-4 border-indigo-500 shadow-sm">
+                    <div class="text-4xl mb-4">🕵️‍♂️</div>
+                    <h3 class="font-bold text-slate-800 text-lg mb-2">UFLPA 供应链溯源审计</h3>
+                    <p class="text-sm text-slate-600">由于上游白牌工厂极度分散且信息化程度低，证明整条供应链的清白（如无强迫劳动）极为困难，在美洲面临大面积整柜扣押风险。</p>
+                </div>
+            </div>
+            <div class="mt-12 p-6 bg-slate-900 text-slate-400 rounded-2xl text-center text-sm border border-slate-700 shadow-inner">
+                <p><strong>研究结论：</strong> Temu 的基本面已从“免税政策+流量套利”彻底转向“重资产基建与本土化大贸合规”。半托管战役的成败，将直接决定这家巨头在后合规时代的命运存亡。</p>
+                <p class="mt-2 text-xs opacity-70">注：本页面所有图表数据基于 2024-2026 行业研究预估构建，不代表官方财报表现。</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Track rendered charts to prevent Canvas resizing bugs
+        let chartsRendered = { fmLinehaul: false, general: false, trend: false };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initScrollSpy();
+            // Init AI Bin Packing Animation Observer
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        const items = document.querySelectorAll('.bin-pack-item');
+                        items.forEach(el => { el.style.animation = 'none'; el.offsetHeight; el.style.animation = null; });
+                    }
+                });
+            });
+            observer.observe(document.getElementById('packing-container'));
+        });
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => { btn.classList.remove('active', 'text-ea580c', 'border-b-2', 'border-orange-500'); btn.classList.add('text-slate-500'); });
+            event.target.classList.add('active', 'text-ea580c', 'border-b-2', 'border-orange-500');
+            event.target.classList.remove('text-slate-500');
+
+            document.querySelectorAll('.tab-content').forEach(content => { content.classList.add('hidden'); content.classList.remove('block'); });
+            document.getElementById(tabId).classList.remove('hidden');
+            document.getElementById(tabId).classList.add('block');
+        }
+
+        function switchRegion(regionId) {
+            document.querySelectorAll('.region-btn').forEach(btn => { btn.classList.remove('active'); });
+            event.target.classList.add('active');
+            document.querySelectorAll('.region-content').forEach(content => { content.classList.add('hidden'); content.classList.remove('block'); });
+            document.getElementById(regionId).classList.remove('hidden');
+            document.getElementById(regionId).classList.add('block');
+        }
+
+        // Accordion / Pipeline Toggle
+        function togglePipeline(stepId, colorTheme) {
+            const content = document.getElementById(`content-${stepId}`);
+            const card = document.getElementById(`card-${stepId}`);
+            const node = document.getElementById(`node-${stepId}`);
+            const icon = document.getElementById(`icon-${stepId}`);
+            const iconbg = document.getElementById(`iconbg-${stepId}`);
+            const badge = document.getElementById(`badge-${stepId}`);
+            const isExpanded = content.classList.contains('expanded');
+
+            const baseNodeClasses = "absolute -left-[21px] md:-left-[25px] top-6 w-10 h-10 rounded-full border-4 border-white flex items-center justify-center font-bold text-lg transition-all duration-300 z-10".split(" ");
+            
+            if (isExpanded) {
+                content.classList.remove('expanded');
+                card.classList.remove(`glow-${colorTheme}`, 'border-transparent'); card.classList.add('border-slate-200');
+                node.className = ''; node.classList.add(...baseNodeClasses, 'bg-slate-200', 'text-slate-500');
+                icon.classList.remove('rotate-180', 'text-white'); icon.classList.add('text-slate-400');
+                iconbg.classList.remove(`bg-${colorTheme}-500`); iconbg.classList.add('bg-slate-100');
+                badge.innerHTML = '展开下钻'; badge.classList.remove(`bg-${colorTheme}-100`, `text-${colorTheme}-700`); badge.classList.add('bg-slate-100', 'text-slate-600');
+            } else {
+                content.classList.add('expanded');
+                card.classList.remove('border-slate-200'); card.classList.add(`glow-${colorTheme}`, 'border-transparent');
+                node.className = '';
+                if(colorTheme === 'blue') {
+                    node.classList.add(...baseNodeClasses, 'bg-blue-600', 'text-white', 'shadow-[0_0_15px_rgba(37,99,235,0.6)]');
+                    iconbg.classList.remove('bg-slate-100'); iconbg.classList.add('bg-blue-500');
+                    badge.classList.remove('bg-slate-100', 'text-slate-600'); badge.classList.add('bg-blue-100', 'text-blue-700');
+                } else {
+                    node.classList.add(...baseNodeClasses, 'bg-orange-500', 'text-white', 'shadow-[0_0_15px_rgba(249,115,22,0.6)]');
+                    iconbg.classList.remove('bg-slate-100'); iconbg.classList.add('bg-orange-500');
+                    badge.classList.remove('bg-slate-100', 'text-slate-600'); badge.classList.add('bg-orange-100', 'text-orange-800');
+                }
+                icon.classList.add('rotate-180', 'text-white'); icon.classList.remove('text-slate-400');
+                badge.innerHTML = '收起面板';
+
+                // Lazy load Linehaul Chart
+                if (stepId === 'fm-2' && !chartsRendered.fmLinehaul) {
+                    setTimeout(renderFMLinehaulCharts, 350); 
+                    chartsRendered.fmLinehaul = true;
+                }
+            }
+        }
+
+        // ScrollSpy and Lazy Loading Global Charts
+        function initScrollSpy() {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const mainContent = document.getElementById('main-content');
+
+            const checkScroll = () => {
+                let current = '';
+                sections.forEach(section => {
+                    if (mainContent.scrollTop >= (section.offsetTop - section.clientHeight / 3)) { current = section.getAttribute('id'); }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active', 'bg-orange-50');
+                    if (link.getAttribute('data-target') === current) { link.classList.add('active'); }
+                });
+
+                // Load performance charts only when section is near viewport
+                const perfSection = document.getElementById('performance');
+                if (perfSection && !chartsRendered.general && (mainContent.scrollTop + window.innerHeight > perfSection.offsetTop - 300)) {
+                    renderGeneralCharts();
+                }
+            };
+            mainContent.addEventListener('scroll', checkScroll);
+            checkScroll(); 
+        }
+
+        function renderGeneralCharts() {
+            Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+            Chart.defaults.color = '#64748b';
+            
+            // Global Doughnut - UPDATED FOR TARIFFS
+            const costCtx = document.getElementById('generalCostChart')?.getContext('2d');
+            if(costCtx) {
+                new Chart(costCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['干线空运 (45%)', '尾程派送 (30%)', '新增关税/清关费 (15%)', '头程制单等 (10%)'],
+                        datasets: [{ data: [45, 30, 15, 10], backgroundColor: ['#ea580c', '#3b82f6', '#ef4444', '#94a3b8'], borderWidth: 2, borderColor: '#fff' }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { position: 'right' } } }
+                });
+            }
+
+            // Global SLA Bar
+            const slaCtx = document.getElementById('generalSlaChart')?.getContext('2d');
+            if(slaCtx) {
+                new Chart(slaCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Amazon', 'Temu(半托管)', 'Shein(直邮)', 'Temu(直邮受阻)', 'AliExpress'],
+                        datasets: [{ label: '平均天数', data: [2, 4.5, 7.5, 12.5, 12], backgroundColor: ['#cbd5e1', '#ea580c', '#93c5fd', '#ef4444', '#e2e8f0'], borderRadius: 4 }]
+                    },
+                    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { grid: { display: false }, border: {display: false} } } }
+                });
+            }
+
+            // SLA Trend Line
+            const trendCtx = document.getElementById('slaTrendChart')?.getContext('2d');
+            if(trendCtx) {
+                new Chart(trendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['23-Q1', '23-Q3', '24-Q1', '24-Q3', '25-Q1', '26-Q1(现状)'],
+                        datasets: [
+                            { label: '全托管直邮时效 (受海关严查变慢)', data: [14, 11, 10.5, 9.5, 11.0, 12.5], borderColor: '#3b82f6', backgroundColor: '#3b82f6', tension: 0.3, borderWidth: 3 },
+                            { label: '半托管本土时效 (极速)', data: [null, null, null, 5.5, 4.5, 3.5], borderColor: '#ea580c', backgroundColor: '#ea580c', tension: 0.3, borderWidth: 4, borderDash: [5, 5] }
+                        ]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, title: {display: true, text: '妥投天数 (Days)'} }, x: { grid: { display: false } } }, plugins: { legend: { position: 'bottom' } } }
+                });
+            }
+            chartsRendered.general = true;
+        }
+
+        function renderFMLinehaulCharts() {
+            Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+            Chart.defaults.color = '#64748b';
+            
+            const vcCtx = document.getElementById('fmLinehaulChart1')?.getContext('2d');
+            if(vcCtx) {
+                new Chart(vcCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['24-Q2', '24-Q3', '24-Q4旺季', '25-免税取消后'],
+                        datasets: [
+                            { label: '单量预估(百万)', type: 'bar', data: [2.8, 3.2, 4.0, 1.5], backgroundColor: '#bfdbfe', borderRadius: 4, yAxisID: 'y' },
+                            { label: '空运价$/kg', type: 'line', data: [4.8, 5.2, 7.0, 4.0], borderColor: '#ea580c', backgroundColor: '#ea580c', borderWidth: 2, tension: 0.3, yAxisID: 'y1' }
+                        ]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom'} }, scales: { x: { grid: { display: false } }, y: { type: 'linear', position: 'left', display: false }, y1: { type: 'linear', position: 'right', display: false } } }
+                });
+            }
+
+            const carrierCtx = document.getElementById('fmLinehaulChart2')?.getContext('2d');
+            if(carrierCtx) {
+                new Chart(carrierCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['极兔包板', '航司直签', '外航包机', '现货散采(停滞)'],
+                        datasets: [{ data: [40, 30, 20, 1], backgroundColor: ['#3b82f6', '#f97316', '#64748b', '#cbd5e1'], borderWidth: 0 }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { position: 'right', labels: { boxWidth: 10 } } } }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
